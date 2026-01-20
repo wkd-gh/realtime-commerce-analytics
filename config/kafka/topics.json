@@ -1,0 +1,107 @@
+{
+  "topics": [
+    {
+      "name": "youtube-raw",
+      "partitions": 3,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "604800000",
+        "cleanup.policy": "delete",
+        "compression.type": "snappy",
+        "segment.bytes": "1073741824"
+      },
+      "description": "Raw YouTube video and comment data"
+    },
+    {
+      "name": "twitter-raw",
+      "partitions": 3,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "604800000",
+        "cleanup.policy": "delete",
+        "compression.type": "snappy",
+        "segment.bytes": "1073741824"
+      },
+      "description": "Raw Twitter tweet data"
+    },
+    {
+      "name": "tiktok-raw",
+      "partitions": 3,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "604800000",
+        "cleanup.policy": "delete",
+        "compression.type": "snappy",
+        "segment.bytes": "1073741824"
+      },
+      "description": "Raw TikTok video data"
+    },
+    {
+      "name": "naver-shopping-raw",
+      "partitions": 3,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "604800000",
+        "cleanup.policy": "delete",
+        "compression.type": "snappy",
+        "segment.bytes": "1073741824"
+      },
+      "description": "Raw Naver Shopping product data"
+    },
+    {
+      "name": "google-trends-raw",
+      "partitions": 3,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "604800000",
+        "cleanup.policy": "delete",
+        "compression.type": "snappy",
+        "segment.bytes": "1073741824"
+      },
+      "description": "Raw Google Trends data"
+    },
+    {
+      "name": "processed-metrics",
+      "partitions": 5,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "604800000",
+        "cleanup.policy": "delete",
+        "compression.type": "snappy"
+      },
+      "description": "Processed and aggregated metrics"
+    },
+    {
+      "name": "sentiment-results",
+      "partitions": 3,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "604800000",
+        "cleanup.policy": "delete",
+        "compression.type": "snappy"
+      },
+      "description": "Sentiment analysis results"
+    },
+    {
+      "name": "trending-alerts",
+      "partitions": 1,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "86400000",
+        "cleanup.policy": "delete"
+      },
+      "description": "Trending content alerts"
+    },
+    {
+      "name": "cross-platform-analysis",
+      "partitions": 3,
+      "replication_factor": 3,
+      "config": {
+        "retention.ms": "604800000",
+        "cleanup.policy": "delete",
+        "compression.type": "snappy"
+      },
+      "description": "Cross-platform analysis results"
+    }
+  ]
+}

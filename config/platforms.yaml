@@ -1,0 +1,115 @@
+# Platform Configuration
+# Defines channels, keywords, and settings for each data source
+
+youtube:
+  enabled: true
+  polling_interval: 60  # seconds
+  channels:
+    # Korean Tech/Review Channels
+    - channel_id: "UCjJjhHSJNzByN7N0hhTLw8Q"  # 잇섭
+    - channel_id: "UCUj6rrhMTR9pipbAWBAMvUQ"  # 디에디트
+    - channel_id: "UChlgI3UHCOnwUGzWbHmH-cA"  # 테크몽
+  keywords:
+    - "신제품 리뷰"
+    - "언박싱"
+    - "추천 제품"
+    - "쿠팡 추천"
+    - "올리브영 추천"
+  max_results_per_request: 50
+  quota_limit_per_day: 10000
+
+twitter:
+  enabled: true
+  polling_interval: 30  # seconds
+  keywords:
+    - "#쇼핑추천"
+    - "#쿠팡"
+    - "#올리브영"
+    - "#핫딜"
+    - "#오늘의쇼핑"
+    - "#뷰티템"
+    - "#패션"
+  users_to_track:
+    - "username1"
+    - "username2"
+  max_results_per_request: 100
+  rate_limit_per_15min: 450
+
+tiktok:
+  enabled: true
+  polling_interval: 120  # seconds
+  hashtags:
+    - "tiktokmademebuyit"
+    - "쿠팡추천"
+    - "올리브영추천"
+    - "뷰티템"
+    - "데일리룩"
+    - "다이소추천"
+  max_videos_per_hashtag: 30
+  rate_limit_delay: 2  # seconds between requests
+
+naver_shopping:
+  enabled: true
+  polling_interval: 300  # seconds
+  categories:
+    - name: "뷰티/화장품"
+      category_id: "50000002"
+    - name: "패션의류"
+      category_id: "50000000"
+    - name: "디지털/가전"
+      category_id: "50000001"
+    - name: "식품"
+      category_id: "50000006"
+  keywords:
+    - "인기상품"
+    - "베스트셀러"
+    - "핫딜"
+  max_results_per_request: 100
+  rate_limit_per_day: 25000
+
+google_trends:
+  enabled: true
+  polling_interval: 600  # seconds
+  keywords:
+    - "쿠팡"
+    - "올리브영"
+    - "무신사"
+    - "마켓컬리"
+    - "배달의민족"
+  categories:
+    - 18   # Shopping
+    - 44   # Beauty & Fitness
+    - 68   # Fashion & Style
+  geo: "KR"
+  timeframe: "now 1-H"  # Last 1 hour
+
+# Brand tracking for cross-platform analysis
+brands:
+  - name: "Apple"
+    keywords: ["애플", "아이폰", "맥북", "에어팟"]
+    category: "Electronics"
+  - name: "Samsung"
+    keywords: ["삼성", "갤럭시", "삼성전자"]
+    category: "Electronics"
+  - name: "Nike"
+    keywords: ["나이키", "에어맥스", "조던"]
+    category: "Fashion"
+  - name: "Dyson"
+    keywords: ["다이슨", "에어랩", "무선청소기"]
+    category: "Home Appliances"
+  - name: "Olive Young"
+    keywords: ["올리브영", "올영", "올영세일"]
+    category: "Beauty"
+
+# Categories for content classification
+categories:
+  - name: "Electronics"
+    keywords: ["전자기기", "가전", "IT", "테크"]
+  - name: "Beauty"
+    keywords: ["뷰티", "화장품", "스킨케어", "메이크업"]
+  - name: "Fashion"
+    keywords: ["패션", "의류", "옷", "신발", "가방"]
+  - name: "Food"
+    keywords: ["음식", "식품", "맛집", "요리"]
+  - name: "Lifestyle"
+    keywords: ["라이프스타일", "인테리어", "홈리빙"]

@@ -1,0 +1,165 @@
+{
+  "dashboard": {
+    "title": "Commerce Analytics - System Monitoring",
+    "tags": ["commerce-analytics", "monitoring"],
+    "timezone": "Asia/Seoul",
+    "refresh": "30s",
+    "panels": [
+      {
+        "title": "Kafka Messages/sec",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(rate(kafka_server_brokertopicmetrics_messagesin_total[5m]))",
+            "legendFormat": "Messages/sec"
+          }
+        ],
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area"
+        }
+      },
+      {
+        "title": "Kafka Consumer Lag",
+        "type": "stat",
+        "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(kafka_consumer_consumer_fetch_manager_metrics_records_lag_max)",
+            "legendFormat": "Max Lag"
+          }
+        ],
+        "options": {
+          "colorMode": "value",
+          "thresholds": {
+            "steps": [
+              {"value": 0, "color": "green"},
+              {"value": 1000, "color": "yellow"},
+              {"value": 5000, "color": "red"}
+            ]
+          }
+        }
+      },
+      {
+        "title": "Spark Active Jobs",
+        "type": "stat",
+        "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "spark_driver_live_listener_bus_queue_appstatus_size",
+            "legendFormat": "Active Jobs"
+          }
+        ]
+      },
+      {
+        "title": "API Quota Usage",
+        "type": "gauge",
+        "gridPos": {"x": 18, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "api_quota_usage / api_quota_limit * 100",
+            "legendFormat": "{{platform}}"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "title": "Kafka Throughput by Topic",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 4, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesin_total[5m])) by (topic)",
+            "legendFormat": "{{topic}}"
+          }
+        ],
+        "yAxes": [
+          {"format": "Bps", "label": "Bytes/sec"}
+        ]
+      },
+      {
+        "title": "Spark Streaming Batch Processing Time",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 4, "w": 12, "h": 8},
+        "targets": [
+          {
+            "expr": "spark_streaming_lastcompletedBatch_processingDelay_value",
+            "legendFormat": "Processing Time"
+          }
+        ],
+        "yAxes": [
+          {"format": "ms", "label": "Milliseconds"}
+        ]
+      },
+      {
+        "title": "Producer Messages Sent",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 12, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(producer_messages_sent_total[5m])) by (platform)",
+            "legendFormat": "{{platform}}"
+          }
+        ]
+      },
+      {
+        "title": "Producer Errors",
+        "type": "graph",
+        "gridPos": {"x": 8, "y": 12, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(producer_messages_failed_total[5m])) by (platform)",
+            "legendFormat": "{{platform}}"
+          }
+        ]
+      },
+      {
+        "title": "Database Connections",
+        "type": "stat",
+        "gridPos": {"x": 16, "y": 12, "w": 8, "h": 6},
+        "targets": [
+          {
+            "expr": "pg_stat_activity_count{datname='commerce_analytics'}",
+            "legendFormat": "PostgreSQL"
+          },
+          {
+            "expr": "redis_connected_clients",
+            "legendFormat": "Redis"
+          }
+        ]
+      },
+      {
+        "title": "Memory Usage",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 18, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(jvm_memory_used_bytes{area='heap'}) by (job)",
+            "legendFormat": "{{job}} Heap"
+          }
+        ],
+        "yAxes": [
+          {"format": "bytes", "label": "Bytes"}
+        ]
+      },
+      {
+        "title": "CPU Usage",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 18, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "rate(process_cpu_seconds_total[5m]) * 100",
+            "legendFormat": "{{job}}"
+          }
+        ],
+        "yAxes": [
+          {"format": "percent", "label": "CPU %"}
+        ]
+      }
+    ]
+  }
+}
