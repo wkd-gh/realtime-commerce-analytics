@@ -1,7 +1,24 @@
 {
   "permissions": {
     "allow": [
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(docker ps:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker exec:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(docker-compose config:*)",
+      "Bash(docker inspect:*)",
+      "Bash(make:*)",
+      "Bash(docker volume rm:*)",
+      "Bash(python -m producers.youtube_producer:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(pkill:*)",
+      "Bash(./scripts/start_streaming.sh:*)",
+      "Bash(tee:*)",
+      "Bash(xargs kill:*)",
+      "Bash(curl:*)"
     ]
   }
 }

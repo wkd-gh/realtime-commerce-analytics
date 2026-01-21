@@ -5,7 +5,7 @@ echo "Initializing databases..."
 
 # Wait for PostgreSQL
 echo "Waiting for PostgreSQL to be ready..."
-until docker exec postgres pg_isready -U admin -d commerce_analytics > /dev/null 2>&1; do
+until docker exec postgres pg_isready -U wkdgh -d commerce_analytics > /dev/null 2>&1; do
     echo "PostgreSQL not ready yet, waiting..."
     sleep 5
 done
@@ -13,9 +13,9 @@ echo "PostgreSQL is ready!"
 
 # Run PostgreSQL migrations
 echo "Running PostgreSQL migrations..."
-docker exec -i postgres psql -U admin -d commerce_analytics < database/migrations/001_create_tables.sql
-docker exec -i postgres psql -U admin -d commerce_analytics < database/migrations/002_create_indexes.sql
-docker exec -i postgres psql -U admin -d commerce_analytics < database/migrations/003_create_views.sql
+docker exec -i postgres psql -U wkdgh -d commerce_analytics < database/migrations/001_create_tables.sql
+docker exec -i postgres psql -U wkdgh -d commerce_analytics < database/migrations/002_create_indexes.sql
+docker exec -i postgres psql -U wkdgh -d commerce_analytics < database/migrations/003_create_views.sql
 echo "PostgreSQL migrations complete!"
 
 # Wait for ClickHouse

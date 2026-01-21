@@ -74,6 +74,7 @@ class StreamingConfig(BaseSettings):
     class Config:
         env_prefix = ""
         env_file = ".env"
+        extra = "ignore"
 
     @property
     def postgres_url(self) -> str:

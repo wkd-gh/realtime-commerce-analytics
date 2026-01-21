@@ -4,7 +4,7 @@ set -e
 echo "Creating Kafka topics..."
 
 KAFKA_CONTAINER="kafka-1"
-BOOTSTRAP_SERVER="localhost:9092"
+BOOTSTRAP_SERVER="kafka-1:29092,kafka-2:29093,kafka-3:29094"
 
 # Wait for Kafka to be ready
 echo "Waiting for Kafka to be ready..."

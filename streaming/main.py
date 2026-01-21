@@ -6,15 +6,39 @@ import os
 import signal
 import sys
 from typing import Dict, List
+from pathlib import Path
+
+# Add parent directory to Python path for imports
+current_file = Path(__file__).resolve()
+streaming_dir = current_file.parent
+parent_dir = streaming_dir.parent
+sys.path.insert(0, str(parent_dir))
+sys.path.insert(0, str(streaming_dir))
+
+# Print for debugging
+print(f"Current file: {current_file}")
+print(f"Streaming dir: {streaming_dir}")
+print(f"Parent dir: {parent_dir}")
+print(f"sys.path: {sys.path[:3]}")
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json, current_timestamp
 
-from .config import get_config, StreamingConfig
-from .schemas import KAFKA_MESSAGE_SCHEMA
-from .transformations import DataParser, WindowAggregations, DataEnrichment, CrossPlatformAnalyzer
-from .ml import SentimentAnalyzer, TrendDetector, KeywordExtractor
-from .sinks import PostgresSink, ClickHouseSink, RedisSink, ElasticsearchSink, SlackSink
+# Try importing with absolute path first
+try:
+    from streaming.config import get_config, StreamingConfig
+    from streaming.schemas import KAFKA_MESSAGE_SCHEMA
+    from streaming.transformations import DataParser, WindowAggregations, DataEnrichment, CrossPlatformAnalyzer
+    from streaming.ml import SentimentAnalyzer, TrendDetector, KeywordExtractor
+    from streaming.sinks import PostgresSink, ClickHouseSink, RedisSink, ElasticsearchSink, SlackSink
+except ImportError as e:
+    print(f"Failed to import with streaming prefix: {e}")
+    # Fall back to local imports
+    from config import get_config, StreamingConfig
+    from schemas import KAFKA_MESSAGE_SCHEMA
+    from transformations import DataParser, WindowAggregations, DataEnrichment, CrossPlatformAnalyzer
+    from ml import SentimentAnalyzer, TrendDetector, KeywordExtractor
+    from sinks import PostgresSink, ClickHouseSink, RedisSink, ElasticsearchSink, SlackSink
 
 logging.basicConfig(
     level=logging.INFO,

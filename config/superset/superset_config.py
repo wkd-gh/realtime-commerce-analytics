@@ -7,10 +7,9 @@ import os
 SECRET_KEY = os.environ.get('SUPERSET_SECRET_KEY', 'your_secret_key_here')
 
 # SQLAlchemy connection string for metadata database
-SQLALCHEMY_DATABASE_URI = (
-    f"postgresql://{os.environ.get('POSTGRES_USER', 'admin')}:"
-    f"{os.environ.get('POSTGRES_PASSWORD', 'password')}@"
-    f"postgres:5432/superset_metadata"
+SQLALCHEMY_DATABASE_URI = os.environ.get(
+    'SUPERSET_SQLALCHEMY_DATABASE_URI',
+    'postgresql://admin:password@postgres:5432/commerce_analytics'
 )
 
 # Flask-WTF flag for CSRF

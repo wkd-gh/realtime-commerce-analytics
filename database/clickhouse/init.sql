@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS raw_events
 ENGINE = MergeTree()
 PARTITION BY toYYYYMMDD(event_time)
 ORDER BY (platform, event_time, content_id)
-TTL event_time + INTERVAL 30 DAY
+TTL toDateTime(event_time) + INTERVAL 30 DAY
 SETTINGS index_granularity = 8192;
 
 -- Metrics time series (aggregated)
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS trending_history
 )
 ENGINE = MergeTree()
 PARTITION BY toYYYYMM(detected_at)
-ORDER BY (platform, detected_at, buzz_score DESC)
+ORDER BY (platform, detected_at, buzz_score)
 TTL detected_at + INTERVAL 90 DAY;
 
 -- Materialized view for hourly aggregation
@@ -188,7 +188,7 @@ AS SELECT
     max(max_views) AS max_views,
     max(unique_authors) AS unique_authors
 FROM platform_metrics_5m
-GROUP BY toStartOfHour(window_start), platform;
+GROUP BY window_start, window_end, platform;
 
 -- Materialized view for keyword aggregation
 CREATE MATERIALIZED VIEW IF NOT EXISTS mv_keyword_hourly
@@ -201,7 +201,7 @@ AS SELECT
     keyword,
     sum(frequency) AS total_frequency
 FROM keyword_frequency
-GROUP BY toStartOfHour(window_start), platform, keyword;
+GROUP BY hour, platform, keyword;
 
 -- Views for analytics
 
