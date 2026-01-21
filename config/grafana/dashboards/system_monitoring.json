@@ -1,165 +1,382 @@
 {
-  "dashboard": {
-    "title": "Commerce Analytics - System Monitoring",
-    "tags": ["commerce-analytics", "monitoring"],
-    "timezone": "Asia/Seoul",
-    "refresh": "30s",
-    "panels": [
-      {
-        "title": "Kafka Messages/sec",
-        "type": "stat",
-        "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
-        "targets": [
-          {
-            "expr": "sum(rate(kafka_server_brokertopicmetrics_messagesin_total[5m]))",
-            "legendFormat": "Messages/sec"
-          }
-        ],
-        "options": {
-          "colorMode": "value",
-          "graphMode": "area"
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PostgreSQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "pieType": "pie",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
         }
       },
-      {
-        "title": "Kafka Consumer Lag",
-        "type": "stat",
-        "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
-        "targets": [
-          {
-            "expr": "sum(kafka_consumer_consumer_fetch_manager_metrics_records_lag_max)",
-            "legendFormat": "Max Lag"
-          }
-        ],
-        "options": {
-          "colorMode": "value",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "PostgreSQL"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT platform, COUNT(*) as count FROM platform_metrics GROUP BY platform",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Platform Metrics Count",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PostgreSQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
           "thresholds": {
+            "mode": "absolute",
             "steps": [
-              {"value": 0, "color": "green"},
-              {"value": 1000, "color": "yellow"},
-              {"value": 5000, "color": "red"}
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 100
+              },
+              {
+                "color": "red",
+                "value": 1000
+              }
             ]
           }
-        }
+        },
+        "overrides": []
       },
-      {
-        "title": "Spark Active Jobs",
-        "type": "stat",
-        "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
-        "targets": [
-          {
-            "expr": "spark_driver_live_listener_bus_queue_appstatus_size",
-            "legendFormat": "Active Jobs"
-          }
-        ]
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
       },
-      {
-        "title": "API Quota Usage",
-        "type": "gauge",
-        "gridPos": {"x": 18, "y": 0, "w": 6, "h": 4},
-        "targets": [
-          {
-            "expr": "api_quota_usage / api_quota_limit * 100",
-            "legendFormat": "{{platform}}"
-          }
-        ],
-        "options": {
-          "showThresholdLabels": true,
-          "showThresholdMarkers": true
-        }
+      "id": 2,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
       },
-      {
-        "title": "Kafka Throughput by Topic",
-        "type": "graph",
-        "gridPos": {"x": 0, "y": 4, "w": 12, "h": 8},
-        "targets": [
-          {
-            "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesin_total[5m])) by (topic)",
-            "legendFormat": "{{topic}}"
-          }
-        ],
-        "yAxes": [
-          {"format": "Bps", "label": "Bytes/sec"}
-        ]
-      },
-      {
-        "title": "Spark Streaming Batch Processing Time",
-        "type": "graph",
-        "gridPos": {"x": 12, "y": 4, "w": 12, "h": 8},
-        "targets": [
-          {
-            "expr": "spark_streaming_lastcompletedBatch_processingDelay_value",
-            "legendFormat": "Processing Time"
-          }
-        ],
-        "yAxes": [
-          {"format": "ms", "label": "Milliseconds"}
-        ]
-      },
-      {
-        "title": "Producer Messages Sent",
-        "type": "graph",
-        "gridPos": {"x": 0, "y": 12, "w": 8, "h": 6},
-        "targets": [
-          {
-            "expr": "sum(rate(producer_messages_sent_total[5m])) by (platform)",
-            "legendFormat": "{{platform}}"
-          }
-        ]
-      },
-      {
-        "title": "Producer Errors",
-        "type": "graph",
-        "gridPos": {"x": 8, "y": 12, "w": 8, "h": 6},
-        "targets": [
-          {
-            "expr": "sum(rate(producer_messages_failed_total[5m])) by (platform)",
-            "legendFormat": "{{platform}}"
-          }
-        ]
-      },
-      {
-        "title": "Database Connections",
-        "type": "stat",
-        "gridPos": {"x": 16, "y": 12, "w": 8, "h": 6},
-        "targets": [
-          {
-            "expr": "pg_stat_activity_count{datname='commerce_analytics'}",
-            "legendFormat": "PostgreSQL"
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "PostgreSQL"
           },
-          {
-            "expr": "redis_connected_clients",
-            "legendFormat": "Redis"
-          }
-        ]
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT platform, COALESCE(SUM(total_views), 0) as value FROM platform_metrics WHERE window_start >= NOW() - INTERVAL '1 hour' GROUP BY platform",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Total Views (Last Hour)",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PostgreSQL"
       },
-      {
-        "title": "Memory Usage",
-        "type": "graph",
-        "gridPos": {"x": 0, "y": 18, "w": 12, "h": 6},
-        "targets": [
-          {
-            "expr": "sum(jvm_memory_used_bytes{area='heap'}) by (job)",
-            "legendFormat": "{{job}} Heap"
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           }
-        ],
-        "yAxes": [
-          {"format": "bytes", "label": "Bytes"}
-        ]
+        },
+        "overrides": []
       },
-      {
-        "title": "CPU Usage",
-        "type": "graph",
-        "gridPos": {"x": 12, "y": 18, "w": 12, "h": 6},
-        "targets": [
-          {
-            "expr": "rate(process_cpu_seconds_total[5m]) * 100",
-            "legendFormat": "{{job}}"
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "PostgreSQL"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "platform",
+          "rawQuery": true,
+          "rawSql": "SELECT window_start as time, platform, SUM(total_views) as value FROM platform_metrics WHERE window_start >= NOW() - INTERVAL '24 hours' GROUP BY window_start, platform ORDER BY window_start",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "window_start",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Views Over Time by Platform",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "PostgreSQL"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           }
-        ],
-        "yAxes": [
-          {"format": "percent", "label": "CPU %"}
-        ]
-      }
-    ]
-  }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 4,
+      "options": {
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "countRows": false,
+          "fields": ""
+        }
+      },
+      "pluginVersion": "10.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "PostgreSQL"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT platform, content_id, title, buzz_score, detected_at FROM trending_content ORDER BY detected_at DESC LIMIT 10",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Trending Content",
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["commerce-analytics", "monitoring"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "Asia/Seoul",
+  "title": "Commerce Analytics - System Monitoring",
+  "uid": "commerce-analytics-monitoring",
+  "version": 0,
+  "weekStart": ""
 }

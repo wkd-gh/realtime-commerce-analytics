@@ -13,9 +13,9 @@ datasources:
     access: proxy
     url: postgres:5432
     database: commerce_analytics
-    user: admin
+    user: wkdgh
     secureJsonData:
-      password: password
+      password: 357tmdgml!!
     jsonData:
       sslmode: disable
       maxOpenConns: 10
@@ -29,9 +29,9 @@ datasources:
     url: http://clickhouse:8123
     jsonData:
       defaultDatabase: commerce_analytics
-      username: admin
+      username: wkdgh
     secureJsonData:
-      password: password
+      password: 357tmdgml!!
     editable: false
 
   - name: Elasticsearch
