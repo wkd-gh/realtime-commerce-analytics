@@ -18,7 +18,17 @@
       "Bash(./scripts/start_streaming.sh:*)",
       "Bash(tee:*)",
       "Bash(xargs kill:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(docker-compose ps:*)",
+      "Bash(./scripts/start_producers.sh:*)",
+      "Bash(docker restart:*)",
+      "Bash(python3:*)",
+      "Bash(docker cp:*)",
+      "Bash(./setup_superset.sh)",
+      "Bash(./create_superset_dashboard.sh:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
